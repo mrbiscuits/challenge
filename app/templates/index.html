@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge App</title>
+    <link rel="stylesheet" href="/static/fonts/hack/hack.css">
+    <link rel="stylesheet" href="/static/fonts/04b03.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <style>
+body, html, #app{
+    width:100%;
+    height:100%;
+}
+.terminal p{
+    margin-bottom: 0.3rem;
+    color:#e89731;
+    font-size:11px;
+    font-family:'04b03';
+}
+.fifth.card{
+    width:100%;
+    height:100%;
+    border:0;
+    position:relative;
+    background:black;
+    background-image:radial-gradient(rgba(0, 70, 0, 0.75), black 120%);
+    font: 1rem hack, monospace;
+    text-shadow: 0 0 5px #C8C8C8;
+    color:#aaa;
+    text-shadow: none;
+}
+.fifth::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(0deg,rgba(0,0,0, 0.15),rgba(0,0,0, 0.15) 1px,transparent 1px,transparent 2px);
+    pointer-events: none;
+}
+::selection {
+    background: #0080FF;
+    color:white;
+    text-shadow: none;
+}
+.cursor {
+    position: relative;
+}
+.cursor i {
+    position: absolute;
+    width: 15px;
+    height: 80%;
+    background-color: gray;
+    left: 5px;
+    top: 10%;
+    animation-name: blink;
+    animation-duration: 800ms;
+    animation-iteration-count: infinite;
+    opacity: 1;
+}
+.form-control, .form-control:focus{
+    background:none !important;
+    border:0 !important;
+    outline:none !important;
+    height:25px;
+    color:white !important;
+    box-shadow:none;
+}
+.cursor input:focus + i {
+    display: none;
+}
+
+@keyframes blink {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+h6{
+    font-family:'04b03';            
+}
+body{
+    font-size:0.9rem;
+    font-family:inter;
+    --table-th-border: #ccc;
+    --table-selected: #a6c7e53b;
+    --table-th: #eee;
+    --table-th-text: black;
+    --table-th-border: #ccc;
+    --table-td: white;
+    --table-td-text: gray;
+    --table-td-border: #eee;
+    --header-bg:#ffffff4d;
+    --header-bg-img:url('/static/images/dark_bg.jpg');
+    background-image:var(--header-bg-img);
+    background-size:cover;
+}
+body.dark{
+    --header-bg-img:url('/static/images/dark_bg.jpg');
+}
+body.light{
+    --header-bg-img:url('/static/images/light_bg.jpg');
+}
+.header {
+    margin-right: 0;
+    margin-left: 0;
+    display: flex;
+    align-items: center;
+    padding: 0px 10px 0px 10px;
+    height: 44px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    /* background: var(--header-bg); */
+}
+.btn{
+    font-size:0.9rem;
+    padding: 2px 12px 3px 12px !important;
+    margin-right:5px;
+    
+}
+.btn .octicon{
+    font-size: 16px;
+    vertical-align: middle;
+    margin-bottom: 3px;
+    color: rgb(191, 191, 191);
+}
+.search {
+    padding-left: 30px;
+    color: #333;
+    font-size:0.9rem;
+}
+
+.table th {
+    color: var(--table-th-text) !important;
+    background: var(--table-th) !important;
+    border-bottom: 1px solid var(--table-th-border) !important;
+}
+thead th {
+    position: sticky;
+    top: 44px;
+    background: white;
+    padding: 10px 5px 3px 5px;
+}
+th, td {
+    white-space: nowrap;
+    text-align: left;
+    white-space: nowrap;
+    padding: 0.5 rem 1 rem 0.5 rem 0;
+    line-height: 1;
+    font-weight: 400;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.fb-Search {
+	display: flex;
+	height: 24px;
+	padding: 1px 70px 2px 7px;
+    width: 100%;
+    bottom:5px;
+	position: absolute;
+}
+
+.fb-Search_Input {
+	-webkit-appearance: none;
+	   -moz-appearance: none;
+	        appearance: none;
+}
+
+.js .fb-Search_Input {
+		position: absolute;
+		left: -100vw;
+	}
+
+.fb-Search_FauxInput {
+	display: none;
+    align-items: center;
+    max-width: 80%;
+    border: 0;
+		color: #688626;
+    border-right: 15px solid transparent;
+    font-size: 1rem;
+}
+.cmd{
+    color:#688626;
+}
+.okblue{
+    color:#6a71f6;
+}
+.js .fb-Search_FauxInput {
+		display: flex;
+    text-shadow: none;
+	}
+
+.fb-Search_Input:focus ~ .fb-Search_FauxInput {
+        -webkit-animation: pulseAttention 1.5s cubic-bezier(.215, .61, .355, 1) forwards infinite;
+                animation: pulseAttention 1.5s cubic-bezier(.215, .61, .355, 1) forwards infinite;
+    }
+
+.fb-Search_Label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    color: #a7a7a7;
+    font-size: 15px;
+}
+
+.fb-Search_Input:not([value=""]) ~ .fb-Search_Label {
+        justify-content: flex-end;
+    }
+.error{
+    color:#81611d
+}
+@-webkit-keyframes pulseAttention {
+    50% {
+        border-color: green;
+    }
+}
+
+@keyframes pulseAttention {
+    50% {
+        border-color: green;
+    }
+}
+pre{
+   white-space: pre-wrap;
+}
+.stack-item{
+    padding: 0 4px 3px 4px;
+    min-width: 35px;
+    min-height: 30px;
+    text-align: center;
+    border-radius: 4px;
+    background: #1a1104;
+    color: white;
+    float: left;
+    margin: 2px 4px;
+    font-family: '04b03';
+    display: flex;
+    flex-direction: column-reverse;
+}
+.info{
+    color:#686ff3;
+}
+
+body .markdown-body h1{
+    padding-top: 7px;
+    font-size:20px;
+}
+
+body .markdown-body h2{
+    font-size:16px;
+}
+
+body .markdown-body h3{
+    font-size:16px;
+    font-style: italic;
+}
+
+body .markdown-body code{
+    color: #ffb200;
+}
+
+body .markdown-body strong{
+    color: #249ebb;
+}
+
+.bg-cmd{
+    background:#143e46;
+    font-size: 12px;
+    padding: 0.25em 0.65em 0.15em 0.65em;
+}
+.legend_close{
+    display:none;
+}
+
+.legend:hover .legend_close{
+    display:inline-block;
+}
+
+    </style>
+
+    <link rel="stylesheet" href="/static/markdown.css">
+  </head>
+  <body style="padding-top:40px;">
+    <div id="app" :style="userTheme">
+        <div class="header draggable" style="display: flex;">
+            <div style="padding-right: 0px; padding-top: 0px; text-align: right; display: inline-flex; justify-content: flex-end; margin-left: auto;">
+                <a @click="toggleTheme($event)" href="#">
+                    <svg v-if="theme == 'dark'" xmlns="http://www.w3.org/2000/svg" width="48" height="48" style="width: 19px;vertical-align: top;margin: 0;height: 31px;margin-right: 14px;fill:#c7c7c8;" viewBox="0 0 48 48"><path d="M0 0h48v48H0z" fill="none"></path><path d="M13.51 9.69L9.93 6.1 7.1 8.93l3.59 3.59 2.82-2.83zM8 21H2v4h6v-4zM26 1.1h-4V7h4V1.1zm14.9 7.83L38.07 6.1l-3.59 3.59 2.83 2.83 3.59-3.59zm-6.41 27.38l3.59 3.59 2.83-2.83-3.59-3.59-2.83 2.83zM40 21v4h6v-4h-6zM24 11c-6.63 0-12 5.37-12 12s5.37 12 12 12 12-5.37 12-12-5.37-12-12-12zm-2 33.9h4V39h-4v5.9zM7.1 37.07l2.83 2.83 3.59-3.59-2.83-2.83-3.59 3.59z"></path></svg>
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 19px;vertical-align: top;margin: 0;height: 31px;margin-right: 14px;fill:#2d2e2f;"><path d="M15.1 14.9c-3-.5-5.5-3-6-6-.4-2.5.3-4.7 1.8-6.4.1-.2 0-.4-.2-.4-5.1.7-8.9 5.1-8.7 10.4.2 5.1 4.4 9.3 9.5 9.5 5.3.2 9.7-3.6 10.4-8.7 0-.2-.2-.4-.4-.2-1.6 1.4-3.9 2.2-6.4 1.8z"></path></svg>
+                </a>
+            </div>
+        </div>
+        <div>
+            <div class="row" style="margin:0;">
+                <div class="col-10 offset-1" style="padding:5px 15px;height: 95%;">
+                    <div class="card" style="width:100%;height:100%;background: #103872bd">
+                        <div class="row" style="min-height: calc(100vh - 100px);">
+                            <div class="col-12" style="padding:5px 15px;min-height: 100%;">
+                                <div class="row" style="height: 100%;">
+                                    <div class="col-12" style="padding:0 15px 5px 15px;height: 66%;">
+                                        <div class="fifth terminal card">
+                                            <!-- fifth interpreter -->
+                                            <div class="legend" v-if="legend" style="padding:0 5px 2px 0;height: 60%;position:absolute;z-index:100;right:0;">
+                                                <div class="" style="width:100%;height:100%;padding:5px 10px;">
+                                                    <h6 style="font-size:13px;margin-top:5px;color:#2882e1">Fifth interpreter commands <a href="#" class="legend_close" @click="toggle_legend()" style="margin-left:15px;"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="14" viewBox="0 0 12 16"><path style="fill:#4a4a4a;" fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"/></svg></a> </h6>
+                                                    <p><span class="badge bg-cmd">PUSH x</span> Push Integers</p>
+                                                    <p><span class="badge bg-cmd">NUMERALS x</span> Push Roman Numerals</p>
+                                                    <p><span class="badge bg-cmd">COLLATZ x</span> Push Collatz Steps</p>
+                                                    <p><span class="badge bg-cmd">POP</span> POP</p>
+                                                    <p><span class="badge bg-cmd">SWAP</span> Swap</p>
+                                                    <p><span class="badge bg-cmd">DUP</span> Duplicate</p>
+                                                    <p><span class="badge bg-cmd">+</span> Add</p>
+                                                    <p><span class="badge bg-cmd">-</span> Subtract</p>
+                                                    <p><span class="badge bg-cmd">*</span> Multiply</p>
+                                                    <p><span class="badge bg-cmd">/</span> Divide</p>
+                                                </div>
+                                            </div>
+                                            <div style="margin-bottom: 20px;height: 100%;overflow: hidden;padding:8px;cursor:text;">
+                                                <pre style="height:100%;width:100%;overflow:hidden;position:relative"><output v-html="output" style="position:absolute;bottom:0;max-width: 100%;"></output>                                            
+                                            
+                                            </pre></div><div class="fb-Search">
+                                                <input v-on:keyup.enter="onEnter" id="Input" class="fb-Search_Input" :value="searchInputValue">
+                                                <span class="fb-Search_FauxInput"></span>
+                                                <label class="fb-Search_Label" for="Input"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12" style="padding:0 15px 0 15px;height: 33%;">
+                                        <div class="card" style="overflow: auto;display:block;background:none;width:100%;height:100%;border:0;">
+                                            {% raw %}
+                                             <div class="stack-item" v-for="item in stack.slice().reverse()">{{item}}</div>
+                                            {% endraw %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testsuite Modal -->
+            <div class="modal fade" id="testsuiteModal" tabindex="-1" aria-labelledby="testsuiteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" style="max-width: 90vw;text-align: center;">
+                <div class="modal-content" style="padding: 0 5px 5px 5px;background: #0b152b;">
+                    <div class="modal-header" style="padding: 0px 5px 2px 5px;border-bottom-color:black;">
+                    <h5 class="modal-title" id="testsuiteModalLabel" style="padding-top:8px;flex-grow: 1;text-align: left;font-family: '04b03';color: white;font-size: 14px;font-weight: 200;">Testsuite</h5>
+                    <a href="#" @click="runtests()" style="margin-right:10px;"><svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 16 16" width="16" height="16"><path style="fill:#1155ff;" d="M2.5 7.25a4.75 4.75 0 019.5 0 .75.75 0 001.5 0 6.25 6.25 0 10-6.25 6.25H12v2.146c0 .223.27.335.427.177l2.896-2.896a.25.25 0 000-.354l-2.896-2.896a.25.25 0 00-.427.177V12H7.25A4.75 4.75 0 012.5 7.25z"></path></svg></a>
+                    <a href="#" data-bs-dismiss="modal" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" viewBox="0 0 12 16"><path style="fill:#1155ff;" fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"/></svg></a>
+                    </div>
+                    <div class="modal-body fifth card" style="height: calc(100vh - 95px);padding: 0 0 0 10px;background-image: radial-gradient(rgb(64 64 64 / 75%), black 120%);">
+                        <pre style="margin-bottom:0;width:100%;">
+                            <output v-if="testoutput" v-html="testoutput" style="text-align: left;width:100%;"></output>
+                        </pre>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!-- Readme Modal -->
+            <div class="modal fade" id="readmeModal" tabindex="-1" aria-labelledby="readmeModalLabel" aria-hidden="true">
+                <div class="modal-dialog" style="max-width: 90vw;text-align: center;">
+                <div class="modal-content" style="padding: 0 5px 5px 5px;background: #0b152b;">
+                    <div class="modal-header" style="padding: 0px 5px 2px 5px;border-bottom-color:black;">
+                    <h5 class="modal-title" id="readmeModalLabel" style="padding-top:8px;flex-grow: 1;text-align: left;font-family: '04b03';color: white;font-size: 14px;font-weight: 200;">README.md</h5>
+                    <a href="#" data-bs-dismiss="modal" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" viewBox="0 0 12 16"><path style="fill:#1155ff;" fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"/></svg></a>
+                    </div>
+                    <div class="modal-body fifth card" style="height: calc(100vh - 95px);padding: 0 0 0 10px;background-image: radial-gradient(rgb(64 64 64 / 75%), black 120%);">
+                        <div style="margin-bottom:0;width:100%;overflow:auto">
+                            <div class="markdown-body" v-if="readme" v-html="readme" style="text-align: left;width:100%;padding-bottom:20px;"></div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="static/vue.global.js"></script>
+    <script src="static/axios.min.js"></script>
+    <script src="static/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="static/markdown.min.js"></script>
+    
+    <script type="module">
+        
+        const Candidate = {
+            data() {
+                return {
+                    dark: false,
+                    theme: 'dark',
+                    stack: [],
+                    searchInput: '',
+                    searchInputValue: '',
+                    searchFauxInput: '',
+                    verbose:true,
+                    lines:['Welcome to Fifth v1.00', 'Type "HELP" for more information.', `Stack is []`],
+                    testoutput:false,
+                    legend:true,
+                    readme: 'Loading...'
+                }
+            },
+            computed:{
+                output () {
+                    return this.lines.join('<br/>')
+                },
+                userTheme () {
+                    console.log(this.theme)
+                    if (this.theme == 'dark'){
+                        // dark
+                        return {
+                            '--header-bg-img': url(`/static/images/dark_bg.jpg`),
+                        }
+                    }else{
+                        // light
+                        return {
+                            '--header-bg-img': url(`/static/images/light_bg.jpg`),
+                        }
+                    }
+                }
+            },
+            mounted() {
+                console.log("hello world")
+                let that = this
+                document.documentElement.setAttribute("class", "js");
+                that.searchFauxInput = document.querySelector(".fb-Search_FauxInput");
+                that.searchInput = document.getElementById("Input");
+                that.searchInput.addEventListener("keyup", function copyInput(event) {
+                    that.searchFauxInput.textContent = that.searchInput.value.toUpperCase();
+                    that.searchInput.setAttribute("value", that.searchInput.value.toUpperCase());
+                }, false);
+                var bodySelector = document.querySelector("body");
+                bodySelector.addEventListener("click", function copyInput(event) {
+                    that.searchInput.focus();
+                }, false);
+                that.searchInput.focus();
+            },
+            methods:{
+                toggle_legend: function(){
+                    this.legend = !this.legend;
+                },
+                toggleTheme: function(e){
+                    console.log(this.theme)
+                    if (this.theme == 'dark'){
+                        this.theme = 'light'
+                        document.body.setAttribute("class", "light");
+                    }else{
+                        this.theme = 'dark'
+                        document.body.setAttribute("class", "dark");
+                    }
+                },
+                runtests: function(){
+                    let that = this
+                    that.testoutput = 'Loading...'
+                    axios.get('/test').then(
+                    function (response) {
+                        that.testoutput = response.data.results
+                    });
+                },
+                onEnter: function(){
+                    let that = this
+                    let command = this.searchInput.value.toUpperCase()
+                    let api_url = '/api/fifth'
+                    // project tree
+                    if (command.includes('HELP') || command.includes('README') || command.includes('SILENT') || command.includes('VERBOSE') || command.includes('CLEAR')|| command.includes('RUNTESTS')){
+                        that.lines.push(`<span class='cmd'>${command}</span>`)
+                        if (command.includes('HELP')){
+                            that.lines.push(`<span class="error">Commands: </span><span class="info">PUSH x, POP, SWAP, DUP, +, -, *, /</span>`)
+                            that.lines.push(`<span class="error">Bonus commands: </span><span class="info">ROMAN x, COLLATZ x, CLEAR, RUNTESTS, README</span>`)
+                        }else{
+                            if (command.includes('SILENT')){
+                                that.verbose = 0
+                                that.lines.push(`ShowErrorMessages:${that.verbose}`)
+                            }
+                            if (command.includes('VERBOSE')){
+                                that.verbose = 1
+                                that.lines.push(`ShowErrorMessages:${that.verbose}`)
+                            }
+                            that.searchInput.setAttribute("value", "");
+                            that.searchFauxInput.textContent = ""
+
+                            if (command.includes('CLEAR')){
+                                that.lines = ['Welcome to Fifth v1.00', 'Type "HELP" for more information.', `Stack is [<span class='cmd'>${that.stack}</span>]`]
+                            }
+                            if (command.includes('RUNTESTS')){
+                                // TODO: restrict to superuser only
+                                let testModal = new bootstrap.Modal(document.getElementById('testsuiteModal'), {})
+                                testModal.show()
+                                that.runtests()
+                            }
+                            if (command.includes('README')){
+                                // TODO: restrict to superuser only
+                                let that = this
+                                that.readme = 'Loading...'
+                                axios.get('/readme').then(
+                                function (response) {
+                                    that.readme = markdown.toHTML(response.data.results.replace(/(<([^>]+)>)/gi, ""))
+                                });
+                                let readmeModal = new bootstrap.Modal(document.getElementById('readmeModal'), {})
+                                readmeModal.show()
+                            }
+                        }
+                    }else{                       
+                        if (command.includes('ROMAN')){
+                            api_url = '/api/roman'
+                        }
+                        if (command.includes('COLLATZ')){
+                            api_url = '/api/collatz'
+                        }
+                        const options = {
+                            method: 'post',
+                            url: api_url,
+                            data: {
+                                stack: this.stack,
+                                cmd: command
+                            },
+                        };
+                        axios(options).then(
+                            function (response) {
+                                that.stack = response.data.stack
+                                that.lines.push(`<span class='cmd'>${command}</span>`)
+                                if (response.data.error && that.verbose){
+                                    that.lines.push(`<span class='error'>${response.data.error.replace('[94m',"<span class='okblue'>").replace('[0m', '</span>')}</span>`)
+                                }
+                                that.lines.push(`Stack is [<span class='cmd'>${response.data.stack}</span>]`)
+                                that.searchInput.setAttribute("value", "");
+                                that.searchFauxInput.textContent = ""
+                            }
+                        ).catch(
+                            function (error) {
+                                // console.log('Show error notification!')
+                                // return Promise.reject(error)
+                            }
+                        )
+                    }
+                }
+            }
+        }
+        function theme(){
+            // background: #ffffff4d;
+        }
+        Vue.createApp(Candidate).mount('#app')
+    </script>
+  </body>
+</html>

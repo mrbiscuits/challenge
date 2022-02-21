@@ -1,0 +1,12 @@
+
+@font-face {
+  font-family: "04b03";
+  src:url("04b03-webfont.eot");
+  src:url("04b03-webfont.eot?#iefix") format("embedded-opentype"),
+    url("04b03-webfont.svg#handy") format("svg"),
+    url("04b03-webfont.ttf") format("truetype"),
+    url("04b03-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+

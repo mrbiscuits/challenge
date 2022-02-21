@@ -1,0 +1,4 @@
+[run]
+    omit=manage*
+         *conftest*
+         *__main__*
