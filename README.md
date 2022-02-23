@@ -7,7 +7,7 @@ This project contains both CLI and Flask interfaces to the problems detailed bel
 python3 ./
 ```
 
-**To run the program launcher** (the program will prompt you to automatically create a virtualenv &install requirements):  
+**To run the program launcher** (the program will prompt you to automatically create a virtualenv & install requirements):  
 ```
 python3 manage.py menu
 ```
