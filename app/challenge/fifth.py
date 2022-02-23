@@ -1,4 +1,5 @@
 from utils import col
+# modifier = REV
 
 def fifth_interpreter(stack=[], cmd=[''], caller="cli"):
     errors = []
@@ -7,46 +8,76 @@ def fifth_interpreter(stack=[], cmd=[''], caller="cli"):
         cmd = input() if caller=='cli' else cmd
         cmd = cmd.strip().upper().split(' ')
         if cmd[0] == 'PUSH' or cmd[0] == 'P' or (len(cmd) == 1 and cmd[0].strip('-').isdigit()):
-            if len(cmd) == 2 and cmd[1].strip('-').isdigit():
-                stack.append(int(cmd[1]))
+            if (len(cmd) == 3 and cmd[-1] == 'REV') or len(cmd) == 2 and cmd[1].strip('-').isdigit():
+                if cmd[-1] == 'REV':
+                    stack.insert(0, int(cmd[1]))
+                else:
+                    stack.append(int(cmd[1]))
             else:
-                if len(cmd) == 1 and cmd[0].strip('-').isdigit():
-                    stack.append(int(cmd[0]))
+                if (len(cmd) == 2 and cmd[-1] == 'REV') or len(cmd) == 1 and cmd[0].strip('-').isdigit():
+                    if cmd[-1] == 'REV':
+                        stack.insert(0, int(cmd[0]))
+                    else:
+                        stack.append(int(cmd[0]))
                 else:
                     errors.append(f"SYNTAX ERROR: Input should be in the form `PUSH x` where x is a valid integer, not `{' '.join(cmd)}`")
                     print(f"{col.ORANGE}{errors[0]}{col.ENDC}")
         elif cmd[0] == 'POP':
             if len(stack):
-                stack.pop()
+                if cmd[-1] == 'REV':
+                    stack.pop(0)      
+                else:
+                    stack.pop()                
             else:
                 errors.append(f"OPERATOR ERROR: Nothing to POP")
                 print(f"{col.ORANGE}{errors[0]}{col.ENDC}")
         elif cmd[0] == 'SWAP':
             if len(stack) > 1:
-                first = stack.pop()
-                last = stack.pop()
-                stack.extend([first, last])
+                if cmd[-1] == 'REV':
+                    first = stack.pop(0)
+                    last = stack.pop(0)
+                    stack.insert(0, first)
+                    stack.insert(0, last)   
+                else:
+                    first = stack.pop()
+                    last = stack.pop()
+                    stack.extend([first, last])
             else:
                 errors.append(f"OPERATOR ERROR: Need at least two items in the stack to perform SWAP")
                 print(f"{col.ORANGE}{errors[0]}{col.ENDC}")
         elif cmd[0] == 'DUP':
             if len(stack):
-                stack.append(stack[-1])
+                if cmd[-1] == 'REV':
+                    stack.insert(0, stack[0])
+                else:
+                    stack.append(stack[-1])
             else:
                 errors.append(f"OPERATOR ERROR: Need at least one item in the stack to perform DUP")
                 print(f"{col.ORANGE}{errors[0]}{col.ENDC}")
         elif cmd[0] in ['+', "-", "*", "/"]:
             if len(stack) > 1:
-                first = stack.pop()
-                last = stack.pop()
-                if cmd[0] == '+':
-                    stack.append(first + last)
-                if cmd[0] == '-':
-                    stack.append(first - last)
-                if cmd[0] == '*':
-                    stack.append(first * last)
-                if cmd[0] == '/':
-                    stack.append(last // first)
+                if cmd[-1] == 'REV':
+                    first = stack.pop(0)
+                    last = stack.pop(0)
+                    if cmd[0] == '+':
+                        stack.insert(0, first + last)
+                    if cmd[0] == '-':
+                        stack.insert(0, first - last)
+                    if cmd[0] == '*':
+                        stack.insert(0, first * last)
+                    if cmd[0] == '/':
+                        stack.insert(0, last // first)
+                else:
+                    first = stack.pop()
+                    last = stack.pop()
+                    if cmd[0] == '+':
+                        stack.append(first + last)
+                    if cmd[0] == '-':
+                        stack.append(first - last)
+                    if cmd[0] == '*':
+                        stack.append(first * last)
+                    if cmd[0] == '/':
+                        stack.append(last // first)
             else:
                 errors.append(f"OPERATOR ERROR: Need at least two items in the stack to perform arithmetic")
                 print(f"{col.ORANGE}{errors[0]}{col.ENDC}")

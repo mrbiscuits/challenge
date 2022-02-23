@@ -13,17 +13,16 @@ def flask_app():
     app.config['TESTING'] = True
     return app.test_client()
 
-
-@pytest.mark.parametrize("value,cmd", [(1, 'PUSH'), (24, 'PUSH'), (490, 'PUSH'),  (2013, 'PUSH')])
-def test_push(flask_app, value, cmd):
-    response = flask_app.post('/api/fifth', json={'cmd': f'{cmd} {value}', 'stack': []})
-    assert json.loads(response.data)["stack"][0] == value
+@pytest.mark.parametrize("value,cmd,expected", [(1, 'PUSH', [2,1]), (24, 'PUSH', [2, 24]), (490, 'PUSH', [2, 490]),  (2013, 'PUSH', [2, 2013])])
+def test_push(flask_app, value, cmd, expected):
+    response = flask_app.post('/api/fifth', json={'cmd': f'{cmd} {value}', 'stack': [2]})
+    assert json.loads(response.data)["stack"] == expected
     assert response.status_code == 200
 
-@pytest.mark.parametrize("value,cmd", [(1, 'PUSH'), (24, 'PUSH'), (490, 'PUSH'),  (2013, 'PUSH')])
-def test_push_shorthand(flask_app, value, cmd):
-    response = flask_app.post('/api/fifth', json={'cmd': f'{value}', 'stack': []})
-    assert json.loads(response.data)["stack"][0] == value
+@pytest.mark.parametrize("value,cmd,expected", [(1, 'PUSH', [2,1]), (24, 'PUSH', [2, 24]), (490, 'PUSH', [2, 490]),  (2013, 'PUSH', [2, 2013])])
+def test_push_shorthand(flask_app, value, cmd, expected):
+    response = flask_app.post('/api/fifth', json={'cmd': f'{value}', 'stack': [2]})
+    assert json.loads(response.data)["stack"] == expected
     assert response.status_code == 200
 
 @pytest.mark.parametrize("stack,expected", [([3,2,2,2,2,2], [2,3,2,2,2,2])])
@@ -86,3 +85,28 @@ def test_arithmatic(flask_app, operator, stack, expected):
         assert json.loads(response.data)["stack"][0] == expected
     
     assert response.status_code == 200  
+
+@pytest.mark.parametrize("value,cmd,expected", [(1, 'PUSH', [1,2]), (24, 'PUSH', [24,2]), (490, 'PUSH', [490, 2]),  (2013, 'PUSH', [2013,2])])
+def test_push_rev(flask_app, value, cmd, expected):
+    response = flask_app.post('/api/fifth', json={'cmd': f'{cmd} {value} REV', 'stack': [2]})
+    assert json.loads(response.data)["stack"] == expected
+    assert response.status_code == 200
+
+@pytest.mark.parametrize("value,cmd,expected", [(1, 'PUSH', [1,2]), (24, 'PUSH', [24,2]), (490, 'PUSH', [490, 2]),  (2013, 'PUSH', [2013,2])])
+def test_push_shorthand_rev(flask_app, value, cmd, expected):
+    response = flask_app.post('/api/fifth', json={'cmd': f'{value} REV', 'stack': [2]})
+    assert json.loads(response.data)["stack"] == expected
+    assert response.status_code == 200
+
+@pytest.mark.parametrize("stack,expected", [([3,2,2,2,2,2], [2,3,2,2,2,2])])
+def test_swap_rev(flask_app, stack, expected):
+    response = flask_app.post('/api/fifth', json={'cmd': f'SWAP  REV', 'stack': stack})
+    json.loads(response.data)["stack"] == expected
+    assert response.status_code == 200  
+    
+@pytest.mark.parametrize("stack,expected", [([22], [22, 22]), ([3,2,2], [3,3,2,2])])
+def test_dup_rev(flask_app, stack, expected):
+    response = flask_app.post('/api/fifth', json={'cmd': f'DUP REV', 'stack': stack})
+    json.loads(response.data)["stack"] == expected
+    assert response.status_code == 200  
+

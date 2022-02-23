@@ -475,7 +475,7 @@ body .markdown-body strong{
                     if (command.includes('HELP') || command.includes('README') || command.includes('SILENT') || command.includes('VERBOSE') || command.includes('CLEAR')|| command.includes('RUNTESTS')){
                         that.lines.push(`<span class='cmd'>${command}</span>`)
                         if (command.includes('HELP')){
-                            that.lines.push(`<span class="error">Commands: </span><span class="info">PUSH x, POP, SWAP, DUP, +, -, *, /</span>`)
+                            that.lines.push(`<span class="error">Commands: </span><span class="info">PUSH x, POP, SWAP, DUP, +, -, *, /</span>, Note, can append REV to apply operations to the bottom of the stack`)
                             that.lines.push(`<span class="error">Bonus commands: </span><span class="info">ROMAN x, COLLATZ x, CLEAR, RUNTESTS, README</span>`)
                         }else{
                             if (command.includes('SILENT')){
